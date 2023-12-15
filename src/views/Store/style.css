@@ -1,0 +1,10 @@
+.kakaopay_btn {
+    background: linear-gradient(to bottom right, red, orange, yellow, green, blue, indigo, violet);
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    text-shadow: 0 0 2px black;
+    border-radius: 4px;
+}

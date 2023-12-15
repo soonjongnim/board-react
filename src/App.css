@@ -1,38 +1,166 @@
-.App {
-  text-align: center;
+.black-button {
+    border-radius: 46px;
+    width: 95px;
+    height: 30px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(0, 0, 0, 1);
+
+    color: rgba(255, 255, 255, 1);
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 140%;
+
+    cursor: pointer;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.black-button:hover {
+    background-color: rgba(0, 0, 0, 0.85);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.black-large-full-button {
+    border-radius: 46px;
+
+    width: 100%;
+    height: 48px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(0, 0, 0, 1);
+
+    color: rgba(255, 255, 255, 1);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 140%;
+
+    cursor: pointer;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.black-large-full-button:hover {
+    background-color: rgba(0, 0, 0, 0.85);
 }
 
-.App-link {
-  color: #61dafb;
+.white-button {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 46px;
+    width: 93px;
+    height: 28px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(255, 255, 255, 1);
+
+    color: rgba(0, 0, 0, 0.5);
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 140%;
+
+    cursor: pointer;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.white-button:hover {
+    background-color: rgba(0, 0, 0, 0.05)
+}
+
+.disable-button {
+    border-radius: 46px;
+    width: 95px;
+    height: 30px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(0, 0, 0, 0.4);
+
+    color: rgba(255, 255, 255, 1);
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 140%;
+
+    cursor: not-allowed;
+}
+
+.icon-box {
+    width: 24px;
+    height: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-button {
+    border-radius: 50% 50%;
+
+    width: 24px;
+    height: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.icon-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.icon {
+    width: 100%;
+    height: 100%;
+
+    background-position: 50% 50%;
+    background-size: 100% 100%;
+}
+
+.eye-light-off-icon {
+    background-image: url(assets/images/eye-light-off.png);
+}
+
+.eye-light-on-icon {
+    background-image: url(assets/images/eye-light-on.png);
+}
+
+.expand-right-light-icon {
+    background-image: url(assets/images/expand-right-light.png);
+}
+
+.logo-light-icon {
+    background-image: url(assets/images/logo-light.png);
+}
+
+.insta-icon {
+    background-image: url(assets/images/insta.png);
+}
+
+.naver-blog-icon {
+    background-image: url(assets/images/naver-blog.png);
+}
+
+.logo-dark-icon {
+    background-image: url(assets/images/logo-dark.png);
+}
+
+.search-light-icon {
+    background-image: url(assets/images/search-light.png);
+}
+
+.check-round-fill-icon {
+    background-image: url(assets/images/check-round-fill.png);
+}
+
+.check-ring-light-icon {
+    background-image: url(assets/images/check-ring-light.png);
 }
