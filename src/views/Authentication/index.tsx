@@ -374,7 +374,7 @@ export default function Authentication() {
                 <img src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="200" height="50"
                   alt="카카오 로그인 버튼" />
               </a>
-            <GoogleOAuthProvider clientId={googleClientId}>
+            <GoogleOAuthProvider clientId={googleClientId || ''}>
                 <GoogleLoginBtn />
             </GoogleOAuthProvider>
             <div className='auth-description-box'>
