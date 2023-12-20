@@ -4,7 +4,7 @@ import { SignInResponseDto, SignUpResponseDto } from "./response/auth";
 import { ResponseDto } from "./response";
 import { GetSignInUserResponseDto } from "./response/user";
 
-const DOMAIN = 'http://158.180.74.125:4000';
+const DOMAIN = 'http://localhost:4000';
 const API_DOMAIN = `${DOMAIN}/api`;
 
 const authorization = (accessToken: string) => {
