@@ -4,6 +4,10 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { AUTH_PATH, BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH, MAIN_PATH, SEARCH_PATH, SOCIAL_OAUTH_PATH, STORE_PATH, USER_PATH } from 'constant';
 import { useCookies } from 'react-cookie';
 import { useBoardStore, useLoginUserStore } from 'stores';
+import { fileUploadRequest, patchBoardRequest, postBoardRequest } from 'apis';
+import { PatchBoardRequestDto, PostBoardRequestDto } from 'apis/request/board';
+import { PatchBoardResponseDto, PostBoardResponseDto } from 'apis/response/board';
+import { ResponseDto } from 'apis/response';
 
 export default function Header() {
   
@@ -135,10 +139,62 @@ export default function Header() {
   // 업로드 버튼 컴포넌트
   const UploadButton = () => {
     
+    const { boardNumber } = useParams();
     const { title, content, boardImageFileList, resetBoard } = useBoardStore();
 
-    const onuploadButtonClickHandler = () => {
-      
+    const postBoardResponse = (responseBody: PostBoardResponseDto | ResponseDto | null) => {
+      if (!responseBody) return;
+      const { code } = responseBody;
+      if (code === 'DBE') alert('데이터베이스 오류입니다.');
+      if (code === 'AF' || code === 'NU') navigate(AUTH_PATH());
+      if (code === 'VF') alert('제목과 내용은 필수입니다.');
+      if (code !== 'SU') return;
+
+      resetBoard();
+      if (!loginUser) return;
+      const { email } = loginUser;
+      navigate(USER_PATH(email));
+    }
+
+    const patchBoardResponse = (responseBody: PatchBoardResponseDto | ResponseDto | null) => {
+      if (!responseBody) return;
+      const { code } = responseBody;
+      if (code === 'DBE') alert('데이터베이스 오류입니다.');
+      if (code === 'AF' || code === 'NU' || code === 'NB' || code === 'NP') navigate(AUTH_PATH());
+      if (code === 'VF') alert('제목과 내용은 필수입니다.');
+      if (code !== 'SU') return;
+
+      if (!boardNumber) return;
+      navigate(BOARD_PATH() + '/' + BOARD_DETAIL_PATH(boardNumber));
+    }
+
+    const onuploadButtonClickHandler = async () => {
+      const accessToken = cookies.accessToken;
+      if (!accessToken) return;
+
+      const boardImageList: string[] = [];
+      for (const file of boardImageFileList) {
+        const data = new FormData();
+        data.append('file', file);
+
+        const url = await fileUploadRequest(data);
+        if (url) boardImageList.push(url);
+      }
+
+      const isWriterPage = pathname === BOARD_PATH() + '/' + BOARD_WRITE_PATH();
+      if (isWriterPage) {
+        const requestBody: PostBoardRequestDto = {
+          title, content, boardImageList
+        }
+        postBoardRequest(requestBody, accessToken).then(postBoardResponse);
+      } else {
+        if (!boardNumber) return;
+
+        const requestBody: PatchBoardRequestDto = {
+          title, content, boardImageList
+        }
+        patchBoardRequest(boardNumber, requestBody, accessToken).then(patchBoardResponse);
+      }
     };
 
     if (title && content)
