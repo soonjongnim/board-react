@@ -7,6 +7,9 @@ import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequestDto } from
 import { PostBoardResponseDto, GetBoardResponseDto, IncreaseViewCountResponseDto, GetFavoriteListResponseDto, GetCommentListResponseDto, PutFavoriteResponseDto, PostCommentResponseDto, DeleteBoardResponseDto, PatchBoardResponseDto, GetLatestBoardListResponseDto, GetTop3BoardListResponseDto, GetSearchBoardListResponseDto, GetUserBoardListResponseDto } from "./response/board";
 import { GetPopularListResponseDto, GetRelationListResponseDto } from "./response/search";
 import { PatchNicknameRequestDto, PatchProfileImageRequestDto } from "./request/user";
+import { DeleteFileResponseDto } from "./response/file";
+import { response } from "express";
+import { error } from "console";
 
 const DOMAIN = process.env.REACT_APP_BACKEND_URL;
 const API_DOMAIN = `${DOMAIN}/api`;
@@ -369,8 +372,9 @@ export const signUpApi = async (data: any) => {
     return result;
 };
 
-const FILE_DOMAIN = `${DOMAIN}/file`;
+const FILE_DOMAIN = `${API_DOMAIN}/file`;
 const FILE_UPLOAD_URL = () => `${FILE_DOMAIN}/upload`;
+const FILE_DELETE_URL = (boardNumber: number | string) => `${FILE_DOMAIN}/delete/${boardNumber}`;
 const multipartFormData = { headers: { 'Content-Type': 'multipart/form-data' } };
 
 export const fileUploadRequest = async (data: FormData) => {
@@ -384,4 +388,18 @@ export const fileUploadRequest = async (data: FormData) => {
             return null;
         })
     return result;
-}
+};
+
+export const fileDeleteRequest = async (boardNumber: number | string, accessToken: string) => {
+    const result = await axios.delete(FILE_DELETE_URL(boardNumber), authorization(accessToken))
+        .then(response => {
+            const responseBody: DeleteFileResponseDto = response.data;
+            return responseBody;
+        })
+        .catch(error => {
+            if(!error.response) return null;
+            const responseBody: ResponseDto = error.response.data;
+            return responseBody;
+        })
+    return result;
+};

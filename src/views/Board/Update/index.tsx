@@ -135,8 +135,8 @@ export default function BoardUpdate() {
             <input ref={imageInputRef} type='file' accept='image/*' style={{ display:'none' }} onChange={onImageChangeHandler} />
           </div>
           <div className='board-update-images-box'>
-            {imageUrls.map((imageUrl, index) => 
-            <div className='board-update-image-box'>
+            {imageUrls.map((imageUrl, index) =>
+            <div className='board-update-image-box' key={index}>
               <img className='board-update-image' src={imageUrl} />
               <div className='icon-button image-close' onClick={() => onImageCloseButtonClickHandler(index)}>
                 <div className='icon close-icon'></div>

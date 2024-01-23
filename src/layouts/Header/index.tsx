@@ -4,7 +4,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { AUTH_PATH, BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH, MAIN_PATH, SEARCH_PATH, SOCIAL_OAUTH_PATH, STORE_PATH, USER_PATH } from 'constant';
 import { useCookies } from 'react-cookie';
 import { useBoardStore, useLoginUserStore } from 'stores';
-import { fileUploadRequest, patchBoardRequest, postBoardRequest } from 'apis';
+import { fileDeleteRequest, fileUploadRequest, patchBoardRequest, postBoardRequest } from 'apis';
 import { PatchBoardRequestDto, PostBoardRequestDto } from 'apis/request/board';
 import { PatchBoardResponseDto, PostBoardResponseDto } from 'apis/response/board';
 import { ResponseDto } from 'apis/response';
@@ -171,6 +171,10 @@ export default function Header() {
     const onuploadButtonClickHandler = async () => {
       const accessToken = cookies.accessToken;
       if (!accessToken) return;
+
+      if (boardNumber && accessToken) {
+        await fileDeleteRequest(boardNumber, accessToken);
+      }
 
       const boardImageList: string[] = [];
       for (const file of boardImageFileList) {
