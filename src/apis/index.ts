@@ -8,8 +8,12 @@ import { PostBoardResponseDto, GetBoardResponseDto, IncreaseViewCountResponseDto
 import { GetPopularListResponseDto, GetRelationListResponseDto } from "./response/search";
 import { PatchNicknameRequestDto, PatchProfileImageRequestDto } from "./request/user";
 import { DeleteFileResponseDto } from "./response/file";
+import { GetItemListResponseDto, PatchItemResponseDto, PostItemResponseDto } from "./response/item";
 import { response } from "express";
 import { error } from "console";
+import GetItemResponseDto from "./response/item/get-item.response.dto";
+import { PatchItemRequestDto, PostItemRequestDto } from "./request/item";
+import DeleteItemResponseDto from "./response/item/delete-item.response.dto";
 
 const DOMAIN = process.env.REACT_APP_BACKEND_URL;
 const API_DOMAIN = `${DOMAIN}/api`;
@@ -75,6 +79,11 @@ const GET_USER_BOARD_LIST_URL = (email: string) => `${API_DOMAIN}/board/user-boa
 const INCREASE_VIEW_COUNT_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}/increase-view-count`;
 const GET_FAVORITE_LIST_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}/favorite-list`;
 const GET_COMMENT_LIST_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}/comment-list`;
+const POST_ITEM_URL = () => `${API_DOMAIN}/item`;
+const GET_ITEM_LIST_URL = () => `${API_DOMAIN}/item/list`;
+const GET_ITEM_URL = (itemId: number | string) => `${API_DOMAIN}/item/${itemId}`;
+const PATCH_ITEM_URL = (itemId: number | string) => `${API_DOMAIN}/item/${itemId}`;
+const DELETE_ITEM_URL = (itemId: number | string) => `${API_DOMAIN}/item/${itemId}`;
 const POST_BOARD_URL = () => `${API_DOMAIN}/board`;
 const POST_COMMENT_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}/comment`;
 const PATCH_BOARD_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}`;
@@ -183,6 +192,76 @@ export const getCommentListRequest = async (boardNumber: number | string) => {
     const result = await axios.get(GET_COMMENT_LIST_URL(boardNumber))
         .then(response => {
             const responseBody: GetCommentListResponseDto = response.data;
+            return responseBody;
+        })
+        .catch(error => {
+            if (!error.response) return null;
+            const responseBody: ResponseDto = error.response.data;
+            return responseBody;
+        })
+    return result;
+}
+
+export const postItemRequest = async (requestBody: PostItemRequestDto, accessToken: string) => {
+    const result = await axios.post(POST_ITEM_URL(), requestBody, authorization(accessToken))
+        .then(response => {
+            const responseBody: PostItemResponseDto = response.data;
+            return responseBody;
+        })
+        .catch(error => {
+            if (!error.response) return null;
+            const responseBody: ResponseDto = error.response.data;
+            return responseBody;
+        })
+    return result;
+}
+
+export const getItemListRequest = async () => {
+    const result = await axios.get(GET_ITEM_LIST_URL())
+        .then(response => {
+            const responseBody: GetItemListResponseDto = response.data;
+            return responseBody;
+        })
+        .catch(error => {
+            if (!error.response) return null;
+            const responseBody: ResponseDto = error.response.data;
+            return responseBody;
+        })
+    return result;
+}
+
+export const getItemRequest = async (itemId: number | string) => {
+    const result = await axios.get(GET_ITEM_URL(itemId))
+        .then(response => {
+            const responseBody: GetItemResponseDto = response.data;
+            return responseBody;
+        })
+        .catch(error => {
+            if (!error.response) return null;
+            const responseBody: ResponseDto = error.response.data;
+            return responseBody;
+        })
+    return result;
+}
+
+export const patchItemRequest = async (itemId: number | string, requestBody: PatchItemRequestDto, accessToken: string) => {
+    const result = await axios.patch(PATCH_ITEM_URL(itemId), requestBody, authorization(accessToken))
+        .then(response => {
+            const responseBody: PatchItemResponseDto = response.data;
+            return responseBody;
+        })
+        .catch(error => {
+            if (!error.response) return null;
+            const responseBody: ResponseDto = error.response.data;
+            return responseBody;
+        })
+    return result;
+}
+
+export const deleteItemRequest = async (itemId: number | string, accessToken: string) => {
+    const result = await axios.delete(DELETE_ITEM_URL(itemId), authorization(accessToken))
+        .then(response => {
+            const responseBody: DeleteItemResponseDto = response.data;
             return responseBody;
         })
         .catch(error => {
@@ -374,7 +453,7 @@ export const signUpApi = async (data: any) => {
 
 const FILE_DOMAIN = `${API_DOMAIN}/file`;
 const FILE_UPLOAD_URL = () => `${FILE_DOMAIN}/upload`;
-const FILE_DELETE_URL = (boardNumber: number | string) => `${FILE_DOMAIN}/delete/${boardNumber}`;
+const FILE_DELETE_URL = (boardNumber: number | string, type: string) => `${FILE_DOMAIN}/delete/${boardNumber}/${type}`;
 const multipartFormData = { headers: { 'Content-Type': 'multipart/form-data' } };
 
 export const fileUploadRequest = async (data: FormData) => {
@@ -390,8 +469,8 @@ export const fileUploadRequest = async (data: FormData) => {
     return result;
 };
 
-export const fileDeleteRequest = async (boardNumber: number | string, accessToken: string) => {
-    const result = await axios.delete(FILE_DELETE_URL(boardNumber), authorization(accessToken))
+export const fileDeleteRequest = async (boardNumber: number | string, type: string, accessToken: string) => {
+    const result = await axios.delete(FILE_DELETE_URL(boardNumber, type), authorization(accessToken))
         .then(response => {
             const responseBody: DeleteFileResponseDto = response.data;
             return responseBody;

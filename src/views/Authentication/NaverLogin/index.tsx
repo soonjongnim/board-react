@@ -22,8 +22,8 @@ export default function NaverLogin() {
 
     const initializeNaverLogin = () => {
         const naverLogin = new naver.LoginWithNaverId({
-          clientId: "9qD4mWPsSAeEFQiMc_td",
-          callbackUrl: "http://localhost:3000",
+          clientId: process.env.REACT_APP_NAVER_CLIENT_ID,
+          callbackUrl: process.env.REACT_APP_NAVER_CALLBACK_URL,
           isPopup: false, // popup 형식으로 띄울것인지 설정
           loginButton: { color: 'grren', type: 3, height: '50' }, //버튼의 스타일, 타입, 크기를 지정
         });
@@ -33,7 +33,7 @@ export default function NaverLogin() {
       const NaverLoginBtn = (() => {
         // 네이버 로그인 초기화
         const naverLogin = new naver.LoginWithNaverId({
-          clientId: "9qD4mWPsSAeEFQiMc_td",
+          clientId: process.env.REACT_APP_NAVER_CLIENT_ID,
           });
           
         // naverLogin.init();

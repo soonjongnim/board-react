@@ -100,7 +100,10 @@ export default function BoardDetail() {
     const onDeleteButtonClickHandler = () => {
       if (!boardNumber || !board || !loginUser || !cookies.accessToken) return;
       if (loginUser.email !== board.writerEmail) return;
-      deleteBoardRequest(boardNumber, cookies.accessToken).then(deleteBoardResponse);
+      if (window.confirm("삭제하시겠습니까?")) {
+        deleteBoardRequest(boardNumber, cookies.accessToken).then(deleteBoardResponse);
+        alert("삭제완료!");
+      }
     }
 
     useEffect(() => {

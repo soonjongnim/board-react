@@ -17,7 +17,10 @@ import BoardDetail from 'views/Board/Detail';
 import BoardWrite from 'views/Board/Write';
 import BoardUpdate from 'views/Board/Update';
 import Container from 'layouts/Container';
-import { MAIN_PATH, AUTH_PATH, SOCIAL_OAUTH_PATH, SEARCH_PATH, USER_PATH, BOARD_PATH, BOARD_WRITE_PATH, BOARD_UPDATE_PATH, BOARD_DETAIL_PATH, STORE_PATH } from 'constant';
+import { MAIN_PATH, AUTH_PATH, SOCIAL_OAUTH_PATH, SEARCH_PATH, 
+  USER_PATH, BOARD_PATH, BOARD_WRITE_PATH, BOARD_UPDATE_PATH, 
+  BOARD_DETAIL_PATH, STORE_PATH, ITEM_PATH, ITEM_DETAIL_PATH,
+  ITEM_UPDATE_PATH } from 'constant';
 import { useCookies } from 'react-cookie';
 import { useLoginUserStore } from 'stores';
 import { GetSignInUserResponseDto } from 'apis/response/user';
@@ -26,6 +29,9 @@ import { User } from 'types/interface';
 import { getSignInUserRequest } from 'apis';
 import SocialSignUp from 'views/Authentication/SocialSignUp';
 import Store from 'views/Store';
+import Item from 'views/Item';
+import ItemDetail from 'views/Item/Detail';
+import ItemUpdate from 'views/Item/Update';
 
 //          component: Application 컴포넌트         //
 export default function App() {
@@ -64,6 +70,12 @@ export default function App() {
         <Route path={SEARCH_PATH(':searchWord')} element={<Search />} />
         <Route path={USER_PATH(':userEmail')} element={<UserP />} />
         <Route path={STORE_PATH()} element={<Store />} />
+        <Route path={ITEM_PATH()} element={<Item />} />
+        <Route path={ITEM_PATH()}>
+          {/* <Route path={ITEM_WRITE_PATH()} element={<ItemWrite />} /> */}
+          <Route path={ITEM_DETAIL_PATH(':itemId')} element={<ItemDetail />} />
+          <Route path={ITEM_UPDATE_PATH(':itemId')} element={<ItemUpdate />} />
+        </Route>
         <Route path={BOARD_PATH()}>
           <Route path={BOARD_WRITE_PATH()} element={<BoardWrite />} />
           <Route path={BOARD_DETAIL_PATH(':boardNumber')} element={<BoardDetail />} />

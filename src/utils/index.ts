@@ -4,7 +4,8 @@ export const convertUrlToFile = async (url: string) => {
     const extend = url.split('.').pop();
     const filename = url.split('/').pop();
     const meta = { type: `image/${extend}` };
-
+    console.log('response:', response);
+    console.log('data:', data);
     return new File([data], filename as string, meta);
 };
 

@@ -1,7 +1,7 @@
 import React, { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import './style.css';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { AUTH_PATH, BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH, MAIN_PATH, SEARCH_PATH, SOCIAL_OAUTH_PATH, STORE_PATH, USER_PATH } from 'constant';
+import { AUTH_PATH, BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH, MAIN_PATH, SEARCH_PATH, SOCIAL_OAUTH_PATH, STORE_PATH, ITEM_PATH, USER_PATH, ITEM_DETAIL_PATH } from 'constant';
 import { useCookies } from 'react-cookie';
 import { useBoardStore, useLoginUserStore } from 'stores';
 import { fileDeleteRequest, fileUploadRequest, patchBoardRequest, postBoardRequest } from 'apis';
@@ -25,6 +25,7 @@ export default function Header() {
   const [isBoardWritePage, setBoardWritePage] = useState<boolean>(false);
   const [isBoardUpdatePage, setBoardUpdatePage] = useState<boolean>(false);
   const [isUserPage, setUserPage] = useState<boolean>(false);
+  const [isItemDetailPage, setItemDetailPage] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -102,6 +103,12 @@ export default function Header() {
       navigate(USER_PATH(email));
     };
 
+    const onItemPageButtonClickHandler = () => {
+      if (!loginUser) return;
+      const { email } = loginUser;
+      navigate(ITEM_PATH());
+    };
+
     const onSignOutButtonClickHandler = () => {
       window.localStorage.clear();
       resetLoginUser();
@@ -122,6 +129,7 @@ export default function Header() {
     return (
       <>
         <div>{loginUser?.nickname}님 로그인 중입니다.</div>
+        <div className='white-button' onClick={onItemPageButtonClickHandler}>{'상품페이지'}</div>
         <div className='white-button' onClick={onMyPageButtonClickHandler}>{'마이페이지'}</div>
         <div className='white-button' onClick={onSignOutButtonClickHandler}>{'로그아웃'}</div>
       </>
@@ -173,7 +181,7 @@ export default function Header() {
       if (!accessToken) return;
 
       if (boardNumber && accessToken) {
-        await fileDeleteRequest(boardNumber, accessToken);
+        await fileDeleteRequest(boardNumber, 'BOARD', accessToken);
       }
 
       const boardImageList: string[] = [];
@@ -181,6 +189,7 @@ export default function Header() {
         const data = new FormData();
         data.append('file', file);
 
+        console.log("image file: ", file);
         const url = await fileUploadRequest(data);
         if (url) boardImageList.push(url);
       }
@@ -229,6 +238,8 @@ export default function Header() {
     setBoardUpdatePage(isBoardUpdatePage);
     const isUserPage = pathname.startsWith(USER_PATH(''));
     setUserPage(isUserPage);  
+    const isItemDetailPage = pathname.startsWith(ITEM_PATH() + '/' + ITEM_DETAIL_PATH(''));
+    setItemDetailPage(isItemDetailPage);
 
   }, [pathname]);
   
@@ -247,8 +258,8 @@ export default function Header() {
           <div className='header-logo'>{'soon Board'}</div> 
         </div>
         <div className='header-right-box'>
-          {(isAuthPage || isMainPage || isSearchPage || isBoardDetailPage || isStorePage) && <SearchButton />}
-          {(isMainPage || isSearchPage || isBoardDetailPage || isUserPage || isStorePage) && <MyPageButton />}
+          {(isAuthPage || isMainPage || isSearchPage || isBoardDetailPage || isStorePage || isItemDetailPage) && <SearchButton />}
+          {(isMainPage || isSearchPage || isBoardDetailPage || isUserPage || isStorePage || isItemDetailPage) && <MyPageButton />}
           {(isBoardWritePage || isBoardUpdatePage) && <UploadButton />}
         </div>
       </div>
