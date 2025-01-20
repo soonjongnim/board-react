@@ -16,7 +16,8 @@ import { PatchItemRequestDto, PostItemRequestDto } from "./request/item";
 import DeleteItemResponseDto from "./response/item/delete-item.response.dto";
 
 const DOMAIN = process.env.REACT_APP_BACKEND_URL;
-const API_DOMAIN = `${DOMAIN}/api`;
+// const API_DOMAIN = `${DOMAIN}/api`;
+const API_DOMAIN = `/api`;
 
 const authorization = (accessToken: string) => {
     return { headers: { Authorization: `Bearer ${accessToken}` } };
