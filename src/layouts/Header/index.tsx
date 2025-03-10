@@ -26,6 +26,7 @@ export default function Header() {
   const [isBoardUpdatePage, setBoardUpdatePage] = useState<boolean>(false);
   const [isUserPage, setUserPage] = useState<boolean>(false);
   const [isItemDetailPage, setItemDetailPage] = useState<boolean>(false);
+  const [isItemListPage, setItemListPage] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -104,8 +105,8 @@ export default function Header() {
     };
 
     const onItemPageButtonClickHandler = () => {
-      if (!loginUser) return;
-      const { email } = loginUser;
+      // if (!loginUser) return;
+      // const { email } = loginUser;
       navigate(ITEM_PATH());
     };
 
@@ -138,6 +139,7 @@ export default function Header() {
     // false일 경우
     return (
       <>
+        <div className='black-button' onClick={onItemPageButtonClickHandler}>{'상품페이지'}</div>
         <div className='black-button' onClick={onSignInButtonClickHandler}>{'로그인'}</div>
       </>
     );
@@ -238,6 +240,8 @@ export default function Header() {
     setBoardUpdatePage(isBoardUpdatePage);
     const isUserPage = pathname.startsWith(USER_PATH(''));
     setUserPage(isUserPage);  
+    const isItemListPage = pathname.startsWith(ITEM_PATH());
+    setItemListPage(isItemListPage);
     const isItemDetailPage = pathname.startsWith(ITEM_PATH() + '/' + ITEM_DETAIL_PATH(''));
     setItemDetailPage(isItemDetailPage);
 
@@ -258,8 +262,8 @@ export default function Header() {
           <div className='header-logo'>{'soon Board'}</div> 
         </div>
         <div className='header-right-box'>
-          {(isAuthPage || isMainPage || isSearchPage || isBoardDetailPage || isStorePage || isItemDetailPage) && <SearchButton />}
-          {(isMainPage || isSearchPage || isBoardDetailPage || isUserPage || isStorePage || isItemDetailPage) && <MyPageButton />}
+          {(isAuthPage || isMainPage || isSearchPage || isBoardDetailPage || isStorePage || isItemListPage || isItemDetailPage) && <SearchButton />}
+          {(isMainPage || isSearchPage || isBoardDetailPage || isUserPage || isStorePage || isItemListPage || isItemDetailPage) && <MyPageButton />}
           {(isBoardWritePage || isBoardUpdatePage) && <UploadButton />}
         </div>
       </div>

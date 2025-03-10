@@ -1,6 +1,7 @@
 import React from 'react';
-import {useEffect, useState, ChangeEvent, useRef} from 'react';
+import {useEffect, useLayoutEffect, useState, ChangeEvent, useRef} from 'react';
 import './style.css';
+import ImageZoom from "components/ImageZoom";
 import { Item } from 'types/interface';
 
 import defaultProfileImage from 'assets/images/default-profile-image.png';
@@ -11,6 +12,7 @@ import { deleteItemRequest, getItemRequest } from 'apis';
 import GetItemResponseDto from 'apis/response/item/get-item.response.dto';
 import { ResponseDto } from 'apis/response';
 import { DeleteItemResponseDto } from 'apis/response/item';
+import { STORE_PATH } from 'constant';
 
 import dayjs from 'dayjs';
 import { useCookies } from 'react-cookie';
@@ -28,12 +30,28 @@ export default function ItemDetail() {
     const [isWriter, setWriter] = useState<boolean>(false);
     const [item, setItem] = useState<Item | null>(null);
     const [showMore, setShowMore] = useState<boolean>(false);
+    // const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
+    // ✅ 이미지 줌 기능 관련 상태 및 Ref
+    // const imgRef = useRef<HTMLImageElement | null>(null);
+    // const lensRef = useRef<HTMLDivElement | null>(null);
+    // const resultRef = useRef<HTMLDivElement | null>(null);
+    // ✅ 추가: 썸네일 이미지 상태
+    const [mainImage, setMainImage] = useState<string>('');
+    // ✅ 탭 상태 추가
+    const [activeTab, setActiveTab] = useState<string>('상품정보');
+    // ✅ 탭 스크롤 관련 추가
+    const tabRef = useRef<HTMLDivElement | null>(null);
+    const initialTabTop = useRef<number | null>(null);
 
     const getWriteDatetimeFormat = () => {
       if (!item) return '';
       const date = dayjs(item.regTime);
       return date.format('YYYY. MM. DD.');
     }
+
+    const onLogoClickHandler = () => {
+      navigate(STORE_PATH());
+    };
     
     const getItemResponse = (responseBody: GetItemResponseDto | ResponseDto | null) => {
       if (!responseBody) return;
@@ -47,6 +65,7 @@ export default function ItemDetail() {
 
       const item: Item = { ...responseBody as GetItemResponseDto };
       setItem(item);
+      setMainImage(item.thumbnailList[0]); // 초기 메인 이미지 설정
 
       if (!loginUser) {
         setWriter(false);
@@ -91,6 +110,13 @@ export default function ItemDetail() {
       deleteItemRequest(itemId, cookies.accessToken).then(deleteItemResponse);
     }
 
+    // ✅ 탭 초기 위치 저장 (useLayoutEffect 사용)
+    useLayoutEffect(() => {
+      if (tabRef.current) {
+        initialTabTop.current = tabRef.current.getBoundingClientRect().top + window.scrollY;
+      }
+    }, []);
+
     useEffect(() => {
       if (!itemId) {
         navigate(MAIN_PATH());
@@ -101,45 +127,71 @@ export default function ItemDetail() {
 
     if (!item) return <></>
     return (
-      <div id='board-detail-top'>
-        <div className='board-detail-top-header'>
-          <div className='board-detail-title'>{item.itemName}</div>
-          <div className='board-detail-top-sub-box'>
-            <div className='board-detail-write-info-box'>
-              {/* <div className='board-detail-writer-profile-image' style={{ backgroundImage: `url(${item.writerProfileImage ? item.writerProfileImage : defaultProfileImage})`}}></div> */}
-              <div className='board-detail-writer-nickname' onClick={onNicknameClickHandler}>가격: {item.price}</div>
-              <div className='board-detail-info-divider'>{'\|'}</div>
-              <div className='board-detail-write-date'>{getWriteDatetimeFormat()}</div>
+      
+      <div className="product-container">
+        <div className="product-content">
+
+          {/* ✅ 왼쪽: 메인 이미지 + 썸네일 */}
+          <div className="product-image-container">
+            <div className="product-image">
+              <ImageZoom key={mainImage} src={mainImage} />
+              {/* 🔍 돋보기 아이콘 (오른쪽 아래) */}
+              <div className="zoom-icon">🔍</div>
             </div>
-            {isWriter && 
-            <div className='icon-button' onClick={onMoreButtonClickHandler}>
-              <div className='icon more-icon'></div>
+            {/* ✅ 썸네일 이미지 리스트 (메인 이미지 아래) */}
+            <div className="thumbnail-container">
+              {item.thumbnailList.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt={`썸네일 ${index + 1}`}
+                  className={`thumbnail ${mainImage === image ? 'active' : ''}`}
+                  onClick={() => setMainImage(image)} // ✅ 클릭 시 해당 이미지로 변경
+                />
+              ))}
             </div>
-            }
-            {showMore && 
-            <div className='board-detail-more-box'>
-              <div className='board-detail-update-button' onClick={onUpdateButtonClickHandler}>{'수정'}</div>
-              <div className='divider'></div>
-              <div className='board-detail-delete-button' onClick={onDeleteButtonClickHandler}>{'삭제'}</div>
-            </div>}
+          </div>
+
+          {/* Product Details */}
+          <div className="product-details">
+            <h1>[오뚜기] 진라면 매운맛 5개입</h1>
+            <p className="highlight">🔥 매운맛이 살아있는 진라면!</p>
+            <p>오뚜기 진라면은 깊고 진한 국물맛으로 사랑받는 제품입니다.</p>
+            <div className="price">₩4,980</div>
+            <button className="cart-button" onClick={onLogoClickHandler}>결제 하기</button>
           </div>
         </div>
-        <div className='divider'></div>
-        <div className='board-detail-top-main'>
-          <div>stockNumber : {item.stockNumber}</div>
-          <div>itemSellStatus : {item.itemSellStatus}</div>
-          <div className='board-detail-main-text'>{item.itemDetail}</div>
-          {/* {item.boardImageList.map((image, index) => <img key={index} className='board-detail-main-image' src={image} />)} */}
+
+        {/* ✅ 탭 메뉴 추가 */}
+        <div ref={tabRef} className="tab-menu">
+          {['상품정보', '리뷰(6,881)', 'Q&A(4,679)', '판매자정보(반품/교환)'].map((tab) => (
+            <div
+              key={tab}
+              className={`tab-item ${activeTab === tab ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab}
+            </div>
+          ))}
+        </div>
+
+        {/* ✅ 탭 내용 */}
+        <div className="tab-content">
+          {activeTab === '상품정보' && (
+            <div className="product-description">
+              <h2>상품 설명</h2>
+              <div dangerouslySetInnerHTML={{ __html: item.itemDetail || '' }} />
+            </div>
+          )}
+          {activeTab === '리뷰(6,881)' && <div className="review-section">📝 리뷰 내용</div>}
+          {activeTab === 'Q&A(4,679)' && <div className="qa-section">💬 Q&A 내용</div>}
+          {activeTab === '판매자정보(반품/교환)' && <div className="seller-info-section">📦 판매자 정보</div>}
         </div>
       </div>
     );
   };
   
   return (
-    <div id='board-detail-wrapper'>
-      <div className='board-detail-container'>
         <ItemDetailTop />
-      </div>
-    </div>
   )
 }

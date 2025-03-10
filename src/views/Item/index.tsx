@@ -50,20 +50,8 @@ export default function Item() {
           <div id='main-bottom-wrapper'>
             <div className='main-bottom-container'>
                 <div className='main-bottom-title'>{'최근 상품'}</div>
-                <div className='main-bottom-contents-box'>
-                  <div className='main-bottom-current-contents'>
-                    {viewList.map((itemListItem, index) => <ItemItem key={index} itemListItem={itemListItem} />)}
-                  </div>
-                  <div className='main-bottom-popular-box'>
-                    <div className='main-bottom-popular-card'>
-                      <div className='main-bottom-popular-card-container'>
-                        <div className='main-bottom-popular-card-title'>{'인기 검색어'}</div>
-                        <div className='main-bottom-popular-card-contents'>
-                          {/* {popularWordList.map((word, index) => <div key={index} className='word-badge' onClick={() => onPopularWordClickHandler(word)}>{word}</div>)} */}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <div className='main-bottom-current-contents'>
+                  {viewList.map((itemListItem, index) => <ItemItem key={index} itemListItem={itemListItem} />)}
                 </div>
                 <div className='main-bottom-pagination-box'>
                   {<Pagination 

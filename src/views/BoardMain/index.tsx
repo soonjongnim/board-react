@@ -10,6 +10,8 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 
 import { fakerKO as faker } from "@faker-js/faker";
 
+const DOMAIN = process.env.NEXT_PUBLIC_API_BACKEND_URL;
+
 interface BoardItem {
     boardNumber: number;
     title: string;
@@ -38,7 +40,7 @@ export default function BoardMain(props: BoardMainProps) {
           }
         };
     
-        await axios.get('http://158.180.74.125:4000/api/board/listPaging', requestOption).then((response) => {
+        await axios.get(`${DOMAIN}/api/board/listPaging`, requestOption).then((response) => {
           setBoardResponse(response.data);
         }).catch((error) => '');
     }

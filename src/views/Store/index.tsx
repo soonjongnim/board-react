@@ -3,12 +3,13 @@ import './style.css';
 import axios from 'axios';
 import { useLoginUserStore } from 'stores';
 
+const DOMAIN = process.env.NEXT_PUBLIC_API_BACKEND_URL;
+
 declare global {
     interface Window {
       IMP: any;
     }
 }
-
 
 const Payment = () => {
 
@@ -78,7 +79,7 @@ const Payment = () => {
                 goods_id : rsp.goods_id,
                 user_email: email,
             }
-            const response:any = await axios.post('http://158.180.74.125:4000/api/payment/verifyIamport', data);
+            const response:any = await axios.post(`${DOMAIN}/api/payment/verifyIamport`, data);
             console.log('response: ' + JSON.stringify(response));
             // if (rsp.paid_amount === data.response.amount) {
             //   alert('결제 완료!');

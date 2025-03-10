@@ -16,8 +16,8 @@ import { PatchItemRequestDto, PostItemRequestDto } from "./request/item";
 import DeleteItemResponseDto from "./response/item/delete-item.response.dto";
 
 const DOMAIN = process.env.REACT_APP_BACKEND_URL;
-// const API_DOMAIN = `${DOMAIN}/api`;
-const API_DOMAIN = `/api`;
+// const API_DOMAIN = `${DOMAIN}/api`;  // 개발모드드
+const API_DOMAIN = `/api`;  // 배포모드
 
 const authorization = (accessToken: string) => {
     return { headers: { Authorization: `Bearer ${accessToken}` } };
@@ -235,6 +235,7 @@ export const getItemRequest = async (itemId: number | string) => {
     const result = await axios.get(GET_ITEM_URL(itemId))
         .then(response => {
             const responseBody: GetItemResponseDto = response.data;
+            console.log('responseBody: ' + JSON.stringify(responseBody));
             return responseBody;
         })
         .catch(error => {

@@ -1,19 +1,19 @@
-.board-list-item {
+.item-list-item {
     padding: 24px;
     background-color: rgba(255, 255, 255, 1);
-
     display: flex;
     align-items: center;
     gap: 30px;
-
     cursor: pointer;
 }
 
-.board-list-item:hover {
+.item-list-item:hover {
+    border: 1px solid #ff0000;
+    /* box-shadow: 0 2px 8px rgba(255, 0, 0, 0.1); */
     background-color: rgba(0, 0, 0, 0.02);
 }
 
-.board-list-item-main-box {
+.item-list-item-main-box {
     flex: 1;
 
     display: flex;
@@ -21,19 +21,19 @@
     gap: 16px;
 }
 
-.board-list-item-top {
+.item-list-item-top {
     display: flex;
     align-items: center;
 
     gap: 8px;
 }
 
-.board-list-item-profile-box {
+.item-list-item-profile-box {
     width: 32px;
     height: 32px;
 }
 
-.board-list-item-profile-image {
+.item-list-item-profile-image {
     border-radius: 50% 50%;
     width: 100%;
     height: 100%;
@@ -42,13 +42,13 @@
     background-size: 100% 100%;
 }
 
-.board-list-item-write-box {
+.item-list-item-write-box {
     display: flex;
     flex-direction: column;
     gap: 2px;
 }
 
-.board-list-item-nickname {
+.item-list-item-nickname {
     color: rgba(0, 0, 0, 0.7);
 
     font-size: 12px;
@@ -56,7 +56,7 @@
     line-height: 140%;
 }
 
-.board-list-item-write-datetime {
+.item-list-item-write-datetime {
     color: rgba(0, 0, 0, 0.4);
 
     font-size: 12px;
@@ -64,13 +64,13 @@
     line-height: 140%;
 }
 
-.board-list-item-middle {
+.item-list-item-middle {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-.board-list-item-title {
+.item-list-item-title {
     color: rgba(0, 0, 0, 1);
 
     font-size: 16px;
@@ -78,7 +78,7 @@
     line-height: 140%;
 }
 
-.board-list-item-content {
+.item-list-item-content {
     color: rgba(0, 0, 0, 0.7);
 
     font-size: 12px;
@@ -86,11 +86,9 @@
     line-height: 140%;
 }
 
-.board-list-item-bottom {
+.item-list-item-bottom {}
 
-}
-
-.board-list-item-counts {
+.item-list-item-counts {
     color: rgba(0, 0, 0, 0.7);
 
     font-size: 12px;
@@ -98,12 +96,12 @@
     line-height: 140%;
 }
 
-.board-list-item-image-box {
+.item-list-item-image-box {
     width: 152px;
     height: 152px;
 }
 
-.board-list-item-image {
+.item-list-item-image {
     border-radius: 10px;
 
     width: 100%;
@@ -111,4 +109,34 @@
 
     background-position: 50% 50%;
     background-size: 100% 100%;
+}
+
+
+.item-container {
+    display: flex;
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+.item-image {
+    width: 100px;
+    height: 100px;
+    margin-right: 10px;
+    background-size: cover;
+    background-position: center;
+}
+
+.item-details {
+    flex-grow: 1;
+}
+
+.item-price {
+    text-align: right;
+    width: 200px;
+}
+
+.discount {
+    color: red;
 }
