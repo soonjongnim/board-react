@@ -6,3 +6,5 @@ interfaces - Type으로 사용할 인스턴스들
 stores - 스토어 함수들
 utils - 각종 메서드들
 views - 큰 페이지 혹은 레이아웃 단위의 컴포넌트들
+
+서버 또는 localhost설정은 : .env 파일에서 설정, package.json에서 "proxy": "http://158.180.74.125:4000", "http://localhost:4000" 설정
